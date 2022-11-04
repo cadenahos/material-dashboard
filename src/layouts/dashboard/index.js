@@ -1,163 +1,115 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
+import * as React from 'react';
 import Grid from "@mui/material/Grid";
+
+// Components additional
+// Grabadora de audio
+import AudioReactRecorderWithOptions from '../../components/AudioRecorderWithOptions'
+import TableWithAccordion from '../../components/TableWithAccordion'
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
+import MDInput from "components/MDInput";
+import MDButton from "components/MDButton";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
-import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
-// Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
-import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
-
-// Dashboard components
-import Projects from "layouts/dashboard/components/Projects";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
-
+  const [open, mostrarAlertaValidacion] = React.useState(false);
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox py={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
-                percentage={{
-                  color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
+      <Box sx={{ width: '100%', marginTop:"10px" }}>
+        <Collapse in={open}>
+          <Alert
+          severity="warning"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  mostrarAlertaValidacion(false);
                 }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
-                percentage={{
-                  color: "success",
-                  amount: "+3%",
-                  label: "than last month",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
-                percentage={{
-                  color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2 }}
+            id="alertaValidacion"
+          >
+          </Alert>
+        </Collapse>
+      </Box>
+      <MDBox py={6} style={{backgroundColor:"#fff",border:"1px solid #000", padding:"10px"}}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={12} lg={12}>
+            <AudioReactRecorderWithOptions />
           </Grid>
         </Grid>
-        <MDBox mt={4.5}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsBarChart
-                  color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
-              </MDBox>
-            </Grid>
+        <Grid container style={{marginTop:"15px"}}>
+          <Grid item xs={12} md={5} lg={5}>
+            <MDInput label="Nombre del audio" id="nombreAudio"></MDInput>
           </Grid>
-        </MDBox>
-        <MDBox>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
-              <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
-            </Grid>
+          <Grid item xs={12} md={5} lg={5}>
+            <MDInput label="Nombre de la carpeta" id="nombreCarpeta"></MDInput>
           </Grid>
-        </MDBox>
+          <Grid item xs={12} md={2} lg={2}>
+            <MDButton onClick={GrabarAudio} color="success">Guardar Audio</MDButton>
+          </Grid>
+        </Grid>
       </MDBox>
-      <Footer />
+      <TableWithAccordion/>
     </DashboardLayout>
   );
+  function ValidarCamposDelAudio() {
+    var mensajesValidacion = "<ul>";
+    var pasaValidacion = true;
+    if(document.getElementById("nombreAudio").value == "") {
+      pasaValidacion = false;
+      mensajesValidacion += `<li>El campo 'Nombre del audio' es requerido</li>`;
+    }
+    if(document.getElementById("nombreCarpeta").value == "") {
+      pasaValidacion = false;
+      mensajesValidacion += `<li>El campo 'Nombre de la carpeta' es requerido</li>`;
+    }
+    if(!pasaValidacion) {
+      mensajesValidacion+="</ul>";
+      document.querySelectorAll("#alertaValidacion .MuiAlert-message")[0].innerHTML = mensajesValidacion;
+      mostrarAlertaValidacion(true);
+      return false;
+    }else {
+      mostrarAlertaValidacion(false);
+      return true;
+    }
+  }
+  function GrabarAudio() {
+    if(!ValidarCamposDelAudio()) {
+      return false;
+    }
+    const audioAGuardar = document.getElementById("audioareproducir").getAttribute("src");
+    const nombreCarpeta = document.getElementById("nombreCarpeta").value;
+    const nombreAudio = document.getElementById("nombreAudio").value;
+    var audios = {};
+    if(localStorage.getItem("audios") != undefined){
+      audios = JSON.parse(localStorage.getItem("audios"));
+    }
+    if(audios[nombreCarpeta] == undefined) {
+      audios[nombreCarpeta] = {};
+    }
+    audios[nombreCarpeta][nombreAudio] = audioAGuardar;
+    localStorage.setItem('audios', `${JSON.stringify(audios)}`)
+    location.reload;
+    
+  }
 }
 
 export default Dashboard;
